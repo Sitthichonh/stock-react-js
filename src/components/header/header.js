@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-// import { server } from "../../constants";
-// import { withRouter } from "react-router-dom";
-// import { connect } from "react-redux";
+import { server } from "../../constants";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 class Header extends Component {
   render() {
@@ -342,7 +342,14 @@ class Header extends Component {
                         Profile
                       </a>
                     </div>
-                    <div className="pull-right">
+                    <div
+                      className="pull-right"
+                      onClick={() => {
+                        this.props.history.push("/login");
+                        localStorage.removeItem(server.LOGIN_PASSED);
+                        this.props.appReducer.app.forceUpdate();
+                      }}
+                    >
                       <a href="#" className="btn btn-default btn-flat">
                         Sign out
                       </a>
@@ -364,12 +371,12 @@ class Header extends Component {
   }
 }
 
-export default Header;
+// export default withRouter(Header);
 
-// const mapStateToProps = ({ appReducer }) => ({
-//   appReducer,
-// });
+const mapStateToProps = ({ appReducer }) => ({
+  appReducer,
+});
 
-// const mapDispatchToProps = {};
+const mapDispatchToProps = {};
 
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import {HttpClient} from "./../../utils/HttpClient";
-import { server } from "../../constants";
-// import { connect } from "react-redux";
-// import { register } from "./../../actions/register.action"
+import { connect } from "react-redux";
+import { register } from "./../../actions/register.action";
+import { withRouter } from "react-router-dom";
 
 class Register extends Component {
   constructor(props) {
@@ -15,28 +14,27 @@ class Register extends Component {
   }
 
   // Arrow Function to register
-  onClickRegister = () => {
-    // Axios.post("http://localhost:8085/api/v2/authen/register", this.state).then(
-    //   (response) => {
-    //     alert(JSON.stringify(response.data));
-    //   }
-    // );
+  // onClickRegister = () => {
+  //   // Axios.post("http://localhost:8085/api/v2/authen/register", this.state).then(
+  //   //   (response) => {
+  //   //     alert(JSON.stringify(response.data));
+  //   //   }
+  //   // );
 
-    HttpClient.post(server.REGISTER_URL, this.state).then(response=>{
-      alert(JSON.stringify(response.data));
-    })
+  //   HttpClient.post(server.REGISTER_URL, this.state).then(response=>{
+  //     alert(JSON.stringify(response.data));
+  //   })
 
+  // };
 
-  };
-
-  // showError = ()=>{
-  //   return (
-  //     <div className="alert alert-danger alert-dismissible">
-  //     <button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
-  //     <h4><i className="icon fa fa-ban" /> Error!</h4> Incorrect information
-  //   </div>
-  //   )
-  // }
+  showError = ()=>{
+    return (
+      <div className="alert alert-danger alert-dismissible">
+      <button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h4><i className="icon fa fa-ban" /> Error!</h4> Incorrect information
+    </div>
+    )
+  }
 
   render() {
     return (
@@ -73,11 +71,18 @@ class Register extends Component {
               />
               <span className="glyphicon glyphicon-lock form-control-feedback" />
             </div>
+
+              {/* Ternery condition */}
+            {this.props.registerReducer.isError ? this.showError() : null }
+
             {/* Register */}
             <div className="row">
               <div className="col-xs-12">
                 <button
-                  onClick={this.onClickRegister}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.props.register(this.props.history, this.state);
+                  }}
                   type="submit"
                   className="btn btn-primary btn-block btn-flat"
                 >
@@ -111,12 +116,13 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = ({ registerReducer }) => ({ registerReducer });
 
-// const mapStateToProps = ({registerReducer}) => ({ registerReducer })
-
-// const mapDispatchToProps = {
-//   register
-// }
+const mapDispatchToProps = {
+  register,
+};
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Register)
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Register)
+);

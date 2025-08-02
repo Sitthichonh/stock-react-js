@@ -1,30 +1,40 @@
 import React, { Component } from "react";
-// import { login, autoLogin } from "./../../actions/login.action";
-// import { connect } from "react-redux";
-
+import { login, autoLogin } from "./../../actions/login.action";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 class Login extends Component {
-  // constructor(props) {
-  //   super(props)
+  constructor(props) {
+    super(props);
 
-  //   this.state = {
-  //      username:"",
-  //      password:""
-  //   }
-  // }
+    this.state = {
+      username: "",
+      password: "",
+    };
+  }
 
-  // componentDidMount(){
-  //   this.props.autoLogin(this.props.history);
-  // }
+  componentDidMount() {
+    this.props.autoLogin(this.props.history);
+  }
 
-  // showError = ()=>{
-  //   return (
-  //     <div className="alert alert-danger alert-dismissible">
-  //     <button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
-  //     <h4><i className="icon fa fa-ban" /> Error!</h4> Incorrect username or password
-  //   </div>
-  //   )
-  // }
+  showError = () => {
+    return (
+      <div className="alert alert-danger alert-dismissible">
+        <button
+          type="button"
+          className="close"
+          data-dismiss="alert"
+          aria-hidden="true"
+        >
+          ×
+        </button>
+        <h4>
+          <i className="icon fa fa-ban" /> Error!
+        </h4>{" "}
+        Incorrect username or password
+      </div>
+    );
+  };
 
   render() {
     return (
@@ -43,6 +53,7 @@ class Login extends Component {
           <form>
             <div className="form-group has-feedback">
               <input
+                onChange={(e) => this.setState({ username: e.target.value })}
                 type="email"
                 className="form-control"
                 placeholder="Email"
@@ -51,16 +62,24 @@ class Login extends Component {
             </div>
             <div className="form-group has-feedback">
               <input
+                onChange={(e) => this.setState({ password: e.target.value })}
                 type="password"
                 className="form-control"
                 placeholder="Password"
               />
               <span className="glyphicon glyphicon-lock form-control-feedback" />
             </div>
+
+            {this.props.loginReducer.isError ? this.showError() : null}
+
             {/* Login */}
             <div className="row">
               <div className="col-xs-12">
                 <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.props.login(this.props.history, this.state);
+                  }}
                   type="submit"
                   className="btn btn-primary btn-block btn-flat"
                 >
@@ -93,13 +112,14 @@ class Login extends Component {
   }
 }
 
-export default Login;
+// export default Login;
 
-// const mapStateToProps = ({ loginReducer }) => ({ loginReducer });
+const mapStateToProps = ({ loginReducer }) => ({ loginReducer });
 
-// const mapDispatchToProps = {
-//   login,
-//   autoLogin,
-// };
+const mapDispatchToProps = {
+  login,
+  autoLogin,
+};
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
