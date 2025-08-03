@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-//import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class Menu extends Component {
   render() {
-    // const { pathname } = this.props.location;
+    const { pathname } = this.props.location;
 
     return (
       <aside className="main-sidebar">
@@ -58,15 +58,15 @@ class Menu extends Component {
                 </span>
               </a>
               <ul className="treeview-menu">
-                <li>
-                  <a href="index.html">
-                    <i className="fa fa-circle-o" /> Dashboard v1
-                  </a>
+                <li className={pathname == "/stock" ? "active" : null}>
+                  <Link to="/stock">
+                    <i className="fa fa-circle-o" /> Stock
+                  </Link>
                 </li>
-                <li className="active">
-                  <a href="index2.html">
-                    <i className="fa fa-circle-o" /> Dashboard v2
-                  </a>
+                <li className={pathname == "/report" ? "active" : null}>
+                  <Link to="/report">
+                    <i className="fa fa-circle-o" /> Report
+                  </Link>
                 </li>
               </ul>
             </li>
@@ -386,6 +386,4 @@ class Menu extends Component {
   }
 }
 
-export default Menu;
-
-// export default withRouter(Menu);
+export default withRouter(Menu);
